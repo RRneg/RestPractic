@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "file")
+@Table(name = "files")
 public class File {
 
     @Id
@@ -12,14 +12,14 @@ public class File {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "path")
-    private String path;
+    @Column(name = "file_path")
+    private String filePath;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "file_name")
+    private String fileName;
 
-    @Column(name = "size")
-    private Integer size;
+    @Column(name = "file_size")
+    private Integer fileSize;
 
     @OneToMany(mappedBy = "events", fetch = FetchType.LAZY)
     private List<Event> events;
@@ -29,9 +29,9 @@ public class File {
 
     public File(Integer id, String path, String name, Integer size) {
         this.id = id;
-        this.path = path;
-        this.name = name;
-        this.size = size;
+        this.filePath = path;
+        this.fileName = name;
+        this.fileSize = size;
     }
 
     public Integer getId() {
@@ -42,37 +42,37 @@ public class File {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public Integer getSize() {
-        return size;
+    public Integer getFileSize() {
+        return fileSize;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setFileSize(Integer fileSize) {
+        this.fileSize = fileSize;
     }
 
     @Override
     public String toString() {
         return "File{" +
                 "id=" + id +
-                ", path='" + path + '\'' +
-                ", name='" + name + '\'' +
-                ", size=" + size +
+                ", path='" + filePath + '\'' +
+                ", name='" + fileName + '\'' +
+                ", size=" + fileSize +
                 '}';
     }
 }
