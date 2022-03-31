@@ -21,7 +21,8 @@ public class File {
     @Column(name = "file_size")
     private Integer fileSize;
 
-    @OneToMany(mappedBy = "events", fetch = FetchType.LAZY)
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
 
     public File() {

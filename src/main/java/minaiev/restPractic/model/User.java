@@ -15,7 +15,8 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @OneToMany(mappedBy = "events", fetch = FetchType.LAZY)
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
 
 
