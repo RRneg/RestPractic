@@ -15,9 +15,14 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
+
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<File> files;
 
 
     public User() {
