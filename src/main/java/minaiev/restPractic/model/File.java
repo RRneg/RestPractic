@@ -21,7 +21,8 @@ public class File {
     @Column(name = "file_size")
     private Integer fileSize;
 
-    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id",
+            referencedColumnName = "id"))
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
 
@@ -65,6 +66,14 @@ public class File {
 
     public void setFileSize(Integer fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     @Override
