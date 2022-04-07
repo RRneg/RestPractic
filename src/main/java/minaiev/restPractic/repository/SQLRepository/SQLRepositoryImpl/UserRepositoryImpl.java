@@ -55,6 +55,6 @@ public class UserRepositoryImpl implements UserRepository {
         user.setId((Integer) session.save(user));
         transaction.commit();
         session.close();
-        return null;
+        return user;
     }
 }

@@ -9,7 +9,6 @@ public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "file_path")
@@ -18,18 +17,18 @@ public class File {
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "file_size")
-    private Integer fileSize;
 
-    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "file_id",
-            referencedColumnName = "id"))
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Event> events;
+
+    @Column(name = "file_size")
+    private Long fileSize;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Event event;
 
     public File() {
     }
 
-    public File(Integer id, String path, String name, Integer size) {
+    public File(Integer id, String path, String name, Long size) {
         this.id = id;
         this.filePath = path;
         this.fileName = name;
@@ -60,21 +59,22 @@ public class File {
         this.fileName = fileName;
     }
 
-    public Integer getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Integer fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
-    public List<Event> getEvents() {
-        return events;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setEvents(List<Event> events) {
-        this.events = events;
+    public void setEvent(Event event) {
+        this.event = event;
     }
+
 
     @Override
     public String toString() {

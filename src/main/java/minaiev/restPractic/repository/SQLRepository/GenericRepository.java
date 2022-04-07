@@ -2,7 +2,7 @@ package minaiev.restPractic.repository.SQLRepository;
 
 import java.util.List;
 
-public interface GeneticRepository<T, ID> {
+public interface GenericRepository<T, ID> {
 
     T getById(ID id);
 

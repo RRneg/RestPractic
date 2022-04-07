@@ -31,11 +31,8 @@ public class FileRepositoryImpl implements FileRepository {
 
     @Override
     public void deleteById(Integer id) {
-        Session session = SQLUtil.getSession();
-        Transaction transaction = session.beginTransaction();
-        session.delete(session.get(File.class, id));
-        transaction.commit();
-        session.close();
+        EventRepositoryImpl eventRepository = new EventRepositoryImpl();
+        eventRepository.setDelStatus(id);
     }
 
     @Override
@@ -54,6 +51,6 @@ public class FileRepositoryImpl implements FileRepository {
         file.setId((Integer)session.save(file));
         transaction.commit();
         session.close();
-        return null;
+        return file;
     }
 }

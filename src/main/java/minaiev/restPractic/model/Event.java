@@ -9,11 +9,11 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "event_status")
-    private EventAction eventStatus;
+    @Enumerated(EnumType.STRING)
+    private EventStatus eventStatus;
 
     @Column(name = "change_made")
     private Date changeMade;
@@ -28,10 +28,10 @@ public class Event {
     public Event(){
     }
 
-    public Event(Integer id, EventAction eventStatus, Date changeTime, Integer userId, Integer fileId) {
+    public Event(Integer id, EventStatus eventStatus, Date changeMade, Integer userId, Integer fileId) {
         this.id = id;
         this.eventStatus = eventStatus;
-        this.changeMade = changeTime;
+        this.changeMade = changeMade;
         this.userId = userId;
         this.fileId = fileId;
     }
@@ -44,11 +44,11 @@ public class Event {
         this.id = id;
     }
 
-    public EventAction getEventStatus() {
+    public EventStatus getEventStatus() {
         return eventStatus;
     }
 
-    public void setEventStatus(EventAction eventStatus) {
+    public void setEventStatus(EventStatus eventStatus) {
         this.eventStatus = eventStatus;
     }
 
@@ -81,7 +81,7 @@ public class Event {
         return "Event{" +
                 "id=" + id +
                 ", eventStatus=" + eventStatus +
-                ", changeTime=" + changeMade +
+                ", changeMade=" + changeMade +
                 ", userId=" + userId +
                 ", fileId=" + fileId +
                 '}';

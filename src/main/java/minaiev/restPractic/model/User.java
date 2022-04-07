@@ -9,23 +9,15 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "user_name")
     private String userName;
 
-    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "file_id", referencedColumnName = "id"))
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Event> events;
-
-    @JoinTable(name = "events", joinColumns = @JoinColumn(name = "user_id",
-            referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "file_id",
-                    referencedColumnName = "id"))
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<File> files;
-
 
     public User() {
 
@@ -60,13 +52,9 @@ public class User {
         this.events = events;
     }
 
-    public List<File> getFiles() {
-        return files;
-    }
 
-    public void setFiles(List<File> files) {
-        this.files = files;
-    }
+
+
 
     @Override
     public String toString() {
