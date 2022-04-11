@@ -1,7 +1,8 @@
 package minaiev.restPractic.servlet;
 
+import minaiev.restPractic.convert.ConvertFile;
+import minaiev.restPractic.dto.FileDTO;
 import minaiev.restPractic.model.File;
-import minaiev.restPractic.repository.SQLRepository.FileRepository;
 import minaiev.restPractic.repository.SQLRepository.SQLRepositoryImpl.EventRepositoryImpl;
 import minaiev.restPractic.repository.SQLRepository.SQLRepositoryImpl.FileRepositoryImpl;
 
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet(value = "/files/*")
 public class Files extends HttpServlet {
     public void init() throws ServletException {
     }
@@ -21,8 +25,13 @@ public class Files extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         FileRepositoryImpl fileRepository = new FileRepositoryImpl();
         File file = fileRepository.getById(request.getIntHeader("fileid"));
-        response.setHeader("pathfile", file.getFilePath());
-    }
+        ConvertFile convert = new ConvertFile();
+        FileDTO fileDTO = convert.convertToFileDTO(file);
+        String json = convert.fileDTOToJSON(fileDTO);
+        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        pw.write(json);
+            }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         FileRepositoryImpl fileRepository = new FileRepositoryImpl();
@@ -53,7 +62,13 @@ public class Files extends HttpServlet {
         file1 = fileRepository.save(file1);
         eventRepository.save(file1, userId);
 
-        // перевести в json и отправить
+        ConvertFile convert = new ConvertFile();
+        FileDTO fileDTO = convert.convertToFileDTO(file1);
+        String json = convert.fileDTOToJSON(fileDTO);
+        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        pw.write(json);
+
 
     }
 
