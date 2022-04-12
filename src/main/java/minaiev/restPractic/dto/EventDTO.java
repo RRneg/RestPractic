@@ -1,5 +1,8 @@
 package minaiev.restPractic.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect
 public class EventDTO {
 
     private String eventStatus;
