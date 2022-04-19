@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 public class ConvertFile {
 
     public FileDTO convertToFileDTO(File file) {
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setId(file.getId());
-        fileDTO.setFileName(file.getFileName());
-        fileDTO.setFilePath(file.getFilePath());
-        fileDTO.setFileSize(file.getFileSize());
+        FileDTO fileDTO = FileDTO.builder()
+                .id(file.getId())
+                .filePath(file.getFilePath())
+                .fileName(file.getFileName())
+                .fileSize(file.getFileSize()).build();
         return fileDTO;
     }
 

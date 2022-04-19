@@ -1,8 +1,17 @@
 package minaiev.restPractic.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "files")
 public class File {
@@ -22,67 +31,7 @@ public class File {
     @Column(name = "file_size")
     private Long fileSize;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "event")
     private Event event;
 
-    public File() {
-    }
-
-    public File(Integer id, String path, String name, Long size) {
-        this.id = id;
-        this.filePath = path;
-        this.fileName = name;
-        this.fileSize = size;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public Long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-
-    @Override
-    public String toString() {
-        return "File{" +
-                "id=" + id +
-                ", path='" + filePath + '\'' +
-                ", name='" + fileName + '\'' +
-                ", size=" + fileSize +
-                '}';
-    }
 }

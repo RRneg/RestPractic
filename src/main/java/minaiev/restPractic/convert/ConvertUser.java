@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 public class ConvertUser {
 
     public UserDTO convertToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getUserName());
+        UserDTO userDTO = UserDTO.builder()
+                .id(user.getId())
+                .name(user.getUserName()).build();
         return userDTO;
     }
 

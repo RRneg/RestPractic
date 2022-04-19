@@ -1,9 +1,10 @@
-package minaiev.restPractic.servlet;
+package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertUser;
 import minaiev.restPractic.dto.UserDTO;
 import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.SQLRepository.SQLRepositoryImpl.UserRepositoryImpl;
+import minaiev.restPractic.repository.SQLRepository.UserRepository;
+import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,21 +16,21 @@ import java.util.List;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet(value = "/users/*")
-public class Users extends HttpServlet {
+public class UsersRestControllerV1 extends HttpServlet {
 
+    private final UserRepository userRepository = new HibernateUserRepositoryImpl();
+    private final ConvertUser convert = new ConvertUser();
 
     public void init() throws ServletException {
 
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl();
-        String url = request.getRequestURI();
+                String url = request.getRequestURI();
         String[] substring = url.split("/");
         int size = substring.length;
         if (substring[size - 1].equals("users")) {
             List<User> users = userRepository.getAll();
-            ConvertUser convert = new ConvertUser();
             List<UserDTO> usersDTO = convert.convertToListUserDTO(users);
             String json = convert.convertListUsersDTOToJSON(usersDTO);
             response.setContentType("application/json");
@@ -40,7 +41,6 @@ public class Users extends HttpServlet {
             try {
                 User user = userRepository.getById(Integer.valueOf(substring[size]));
                 if (user != null) {
-                    ConvertUser convert = new ConvertUser();
                     UserDTO userDTO = convert.convertToUserDTO(user);
                     String json = convert.convertUserDTOToJSON(userDTO);
                     response.setContentType("application/json");
@@ -57,18 +57,17 @@ public class Users extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl();
-        Integer id = request.getIntHeader("userid");
-        String userName = request.getHeader("username");
+
+        Integer id = request.getIntHeader("userid");//где брать новый ид
+        String userName = request.getHeader("username");// где брать новое имя
+        //надо ли апдейтить список ивентов?
         userRepository.update(new User(id, userName));
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl();
         User user = new User();
         user.setUserName(request.getHeader("username"));
         user.setId(userRepository.save(user).getId());
-        ConvertUser convert = new ConvertUser();
         UserDTO userDTO = convert.convertToUserDTO(user);
         String json = convert.convertUserDTOToJSON(userDTO);
         response.setContentType("application/json");
@@ -79,7 +78,6 @@ public class Users extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl();
         userRepository.deleteById(request.getIntHeader("userid"));
     }
 

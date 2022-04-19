@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import minaiev.restPractic.dto.EventDTO;
 import minaiev.restPractic.model.Event;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,9 +13,14 @@ public class ConvertEvent {
 
 
     public EventDTO convertToEventDTO(Event event) {
-        EventDTO eventDTO = new EventDTO();
-        eventDTO.setEventStatus(event.getEventStatus().toString());
-        eventDTO.setDateChange(event.getChangeMade().toString());
+        EventDTO eventDTO = EventDTO.builder()
+                .id(event.getId())
+                .eventStatus(event.getEventStatus().toString())
+                .updated(event.getUpdated().toString())
+                .created(event.getCreated().toString())
+                .userName(event.getUser().getUserName())
+                .fileName(event.getFile().getFileName())
+                .filePath(event.getFile().getFilePath()).build();
         return eventDTO;
     }
 

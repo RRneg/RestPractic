@@ -1,10 +1,18 @@
-package minaiev.restPractic.servlet;
+package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertFile;
 import minaiev.restPractic.dto.FileDTO;
+import minaiev.restPractic.model.Event;
+import minaiev.restPractic.model.EventStatus;
 import minaiev.restPractic.model.File;
-import minaiev.restPractic.repository.SQLRepository.SQLRepositoryImpl.EventRepositoryImpl;
-import minaiev.restPractic.repository.SQLRepository.SQLRepositoryImpl.FileRepositoryImpl;
+import minaiev.restPractic.model.User;
+import minaiev.restPractic.repository.SQLRepository.EventRepository;
+import minaiev.restPractic.repository.SQLRepository.FileRepository;
+import minaiev.restPractic.repository.SQLRepository.GenericRepository;
+import minaiev.restPractic.repository.SQLRepository.UserRepository;
+import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
+import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateFileRepositoryImpl;
+import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,15 +23,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet(value = "/files/*")
-public class Files extends HttpServlet {
+public class FilesRestControllerV1 extends HttpServlet {
+
+    private final UserRepository userRepository = new HibernateUserRepositoryImpl();
+    private final FileRepository fileRepository = new HibernateFileRepositoryImpl();
+    private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
+
     public void init() throws ServletException {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FileRepositoryImpl fileRepository = new FileRepositoryImpl();
         File file = fileRepository.getById(request.getIntHeader("fileid"));
         ConvertFile convert = new ConvertFile();
         FileDTO fileDTO = convert.convertToFileDTO(file);
@@ -34,8 +47,6 @@ public class Files extends HttpServlet {
             }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FileRepositoryImpl fileRepository = new FileRepositoryImpl();
-        EventRepositoryImpl eventRepository = new EventRepositoryImpl();
         Integer userId = request.getIntHeader("userid");
 
         String fileName = request.getHeader("filename");
@@ -55,12 +66,21 @@ public class Files extends HttpServlet {
 
         java.io.File file = new java.io.File(filePath);
 
-        File file1 = new File();
-        file1.setFilePath(filePath);
-        file1.setFileName(file.getName());
-        file1.setFileSize(file.length());
+        File file1 = File.builder()
+        .filePath(filePath)
+        .fileName(file.getName())
+        .fileSize(file.length()).build();
         file1 = fileRepository.save(file1);
-        eventRepository.save(file1, userId);
+
+        Event event = Event.builder()
+                .id(null)
+                .eventStatus(EventStatus.ACTIVE)
+                .updated(new Date())
+                .created(new Date())
+                .user((User) userRepository.getById(userId))
+                .file(file1).build();
+
+        eventRepository.save(event);
 
         ConvertFile convert = new ConvertFile();
         FileDTO fileDTO = convert.convertToFileDTO(file1);
@@ -73,7 +93,6 @@ public class Files extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        FileRepositoryImpl fileRepository = new FileRepositoryImpl();
         Integer id = request.getIntHeader("fileid");
         fileRepository.deleteById(id);
     }
