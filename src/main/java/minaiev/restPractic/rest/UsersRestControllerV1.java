@@ -48,9 +48,9 @@ public class UsersRestControllerV1 extends HttpServlet {
                     pw.write(json);
 
                 } else
-                    response.sendError(404, "Not Found");
+                    response.setStatus(404);
             } catch (ClassCastException e) {
-                response.sendError(404, "Not Found");
+                response.setStatus(500);
             }
         }
 
