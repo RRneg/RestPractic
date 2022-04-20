@@ -49,7 +49,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         try (Session session = SQLUtil.getSession();){
-        return session.createQuery("FROM users").list();
+        return session.createQuery("FROM User").list();
         }
         catch (SessionException e){
         return null;

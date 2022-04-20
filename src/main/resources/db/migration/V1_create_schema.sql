@@ -1,9 +1,9 @@
-CREATE TABLE users (
+CREATE TABLE User (
 id INT NOT_NULL AUTO_INCREMENT,
 user_name VARCHAR (255)
 PRIMARY KEY(id) );
 
-CREATE TABLE files (
+CREATE TABLE File (
 id INT NOT_NULL  AUTO_INCREMENT,
 file_path VARCHAR(1000),
 file_name VARCHAR(255),
@@ -11,7 +11,7 @@ file_size INT,
 PRIMARY KEY(id)
 );
 
-CREATE TABLE events (
+CREATE TABLE Events (
 id INT NOT_NULL PRIMARY KEY AUTO_INCREMENT,
 event_status VARCHAR(30),
 updated DATETIME NOW(),

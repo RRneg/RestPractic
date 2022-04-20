@@ -44,7 +44,7 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public List<File> getAll() {
         try (Session session = SQLUtil.getSession()) {
-            return session.createQuery("FROM files").list();
+            return session.createQuery("FROM File").list();
         }
         catch (SessionException e) {
             return null;

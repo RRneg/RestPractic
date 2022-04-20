@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet(value = "/events/*")
+@WebServlet(value = "/api/v1/events/*")
 public class EventsRestControllerV1 extends HttpServlet {
 
     private final EventRepository eventRepository = new HibernateEventRepositoryImpl();

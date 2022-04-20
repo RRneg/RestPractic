@@ -18,7 +18,7 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
     public List<Event> getEventByUserId(Integer userId) {
         try (Session session = SQLUtil.getSession()){
-        Query query = session.createQuery("FROM events E WHERE E.user_id = :userId");
+        Query query = session.createQuery("FROM Event E WHERE E.user_id = :userId");
         return query.list();
         }
         catch (SessionException e){
@@ -29,7 +29,7 @@ public class HibernateEventRepositoryImpl implements EventRepository {
     public void setDelStatus(Integer idFile) {
         try(Session session = SQLUtil.getSession()){
         Transaction transaction = session.beginTransaction();
-        Event event = (Event) session.createQuery("FROM events E WHERE E.file_id = :idFile");
+        Event event = (Event) session.createQuery("FROM Event E WHERE E.file_id = :idFile");
         event.setEventStatus(EventStatus.DELETED);
         session.update(event);
         transaction.commit();

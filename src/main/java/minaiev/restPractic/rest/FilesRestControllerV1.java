@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet(value = "/files/*")
+@WebServlet(value = "/api/v1/files/*")
 public class FilesRestControllerV1 extends HttpServlet {
 
     private final UserRepository userRepository = new HibernateUserRepositoryImpl();
