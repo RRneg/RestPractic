@@ -39,7 +39,7 @@ public class EventsRestControllerV1 extends HttpServlet {
                 pw.write(json);
 
             } else {
-                response.sendError(404, "Not Found");
+                response.setStatus(500);
             }
         }
     }

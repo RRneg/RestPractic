@@ -26,15 +26,13 @@ public class HibernateEventRepositoryImpl implements EventRepository {
         }
     }
 
-    public void setDelStatus(Integer idFile) {
-        try(Session session = SQLUtil.getSession()){
-        Transaction transaction = session.beginTransaction();
-        Event event = (Event) session.createQuery("FROM Event E WHERE E.file_id = :idFile");
-        event.setEventStatus(EventStatus.DELETED);
-        session.update(event);
-        transaction.commit();
-        }
-        catch (SessionException e){
+    public void setDelStatus(Integer fileId) throws SessionException{
+        try(Session session = SQLUtil.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("UPDATE Event E SET event_status 'DELETED' WHERE E.file_id = :fileId");
+            query.setParameter("fileId", fileId);
+            query.executeUpdate();
+            transaction.commit();
         }
     }
 

@@ -5,6 +5,7 @@ import minaiev.restPractic.dto.UserDTO;
 import minaiev.restPractic.model.User;
 import minaiev.restPractic.repository.SQLRepository.UserRepository;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import org.hibernate.SessionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,11 +32,14 @@ public class UsersRestControllerV1 extends HttpServlet {
         int size = substring.length;
         if (substring[size - 1].equals("users")) {
             List<User> users = userRepository.getAll();
-            List<UserDTO> usersDTO = convert.convertToListUserDTO(users);
-            String json = convert.convertListUsersDTOToJSON(usersDTO);
-            response.setContentType("application/json");
-            PrintWriter pw = response.getWriter();
-            pw.write(json);
+            if(users != null) {
+                List<UserDTO> usersDTO = convert.convertToListUserDTO(users);
+                String json = convert.convertListUsersDTOToJSON(usersDTO);
+                response.setContentType("application/json");
+                PrintWriter pw = response.getWriter();
+                pw.write(json);
+            }
+            else {response.setStatus(500);}
 
         } else {
             try {
@@ -60,25 +64,41 @@ public class UsersRestControllerV1 extends HttpServlet {
 
         Integer id = request.getIntHeader("userid");//где брать новый ид
         String userName = request.getHeader("username");// где брать новое имя
-        //надо ли апдейтить список ивентов?
-        userRepository.update(new User(id, userName));
+        User user = User.builder()
+                .id(id)
+                .userName(userName)
+                .events(null).build();
+        User userUPD = userRepository.update(user);
+        if(userUPD.getUserName() !=userName){
+            response.setStatus(500);
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = new User();
         user.setUserName(request.getHeader("username"));
         user.setId(userRepository.save(user).getId());
-        UserDTO userDTO = convert.convertToUserDTO(user);
-        String json = convert.convertUserDTOToJSON(userDTO);
-        response.setContentType("application/json");
-        PrintWriter pw = response.getWriter();
-        pw.write(json);
+        if(user.getId() != null) {
+            UserDTO userDTO = convert.convertToUserDTO(user);
+            String json = convert.convertUserDTOToJSON(userDTO);
+            response.setContentType("application/json");
+            PrintWriter pw = response.getWriter();
+            pw.write(json);
+        }
+        else {
+            response.setStatus(500);
+        }
 
 
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        userRepository.deleteById(request.getIntHeader("userid"));
+        try {
+            userRepository.deleteById(request.getIntHeader("userid"));
+        }
+        catch (SessionException e){
+            response.setStatus(500);
+        }
     }
 
 

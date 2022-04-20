@@ -6,6 +6,7 @@ import minaiev.restPractic.util.SQLUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -24,7 +25,10 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     public User update(User user) {
         try (Session session = SQLUtil.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.update(user);
+            Query query = session.createQuery("UPDATE User U SET user_name = :userName WHERE U.id = :id");
+            query.setParameter("userName", user.getUserName());
+            query.setParameter("id", user.getId());
+            query.executeUpdate();
             transaction.commit();
             return user;
         }
@@ -34,17 +38,14 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        try (Session session = SQLUtil.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            User user = session.get(User.class, id);
-            session.delete(user);
-            transaction.commit();
-        }
-        catch (SessionException e){
-            //что я должен передать клиенту?
-        }
-    }
+    public void deleteById(Integer id) throws SessionException{
+            try (Session session = SQLUtil.getSession()) {
+                Transaction transaction = session.beginTransaction();
+                User user = session.get(User.class, id);
+                session.delete(user);
+                transaction.commit();
+            }
+       }
 
     @Override
     public List<User> getAll() {

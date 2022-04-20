@@ -8,11 +8,11 @@ import minaiev.restPractic.model.File;
 import minaiev.restPractic.model.User;
 import minaiev.restPractic.repository.SQLRepository.EventRepository;
 import minaiev.restPractic.repository.SQLRepository.FileRepository;
-import minaiev.restPractic.repository.SQLRepository.GenericRepository;
 import minaiev.restPractic.repository.SQLRepository.UserRepository;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateFileRepositoryImpl;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import org.hibernate.SessionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -97,7 +97,12 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
         Integer id = request.getIntHeader("fileid");
-        fileRepository.deleteById(id);
+        try {
+            fileRepository.deleteById(id);
+        }
+        catch (SessionException e){
+            response.setStatus(500);
+        }
     }
 
     public void destroy() {
