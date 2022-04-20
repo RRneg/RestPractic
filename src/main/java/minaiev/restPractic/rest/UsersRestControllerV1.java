@@ -5,6 +5,7 @@ import minaiev.restPractic.dto.UserDTO;
 import minaiev.restPractic.model.User;
 import minaiev.restPractic.repository.SQLRepository.UserRepository;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
 import javax.servlet.ServletException;
@@ -21,16 +22,15 @@ public class UsersRestControllerV1 extends HttpServlet {
 
     private final UserRepository userRepository = new HibernateUserRepositoryImpl();
     private final ConvertUser convert = new ConvertUser();
+    private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
 
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                String url = request.getRequestURI();
-        String[] substring = url.split("/");
-        int size = substring.length;
-        if (substring[size - 1].equals("users")) {
+        String ending = uriSubstring.uriSubstring(request);
+        if (ending.equals("users")) {
             List<User> users = userRepository.getAll();
             if(users != null) {
                 List<UserDTO> usersDTO = convert.convertToListUserDTO(users);
@@ -43,7 +43,7 @@ public class UsersRestControllerV1 extends HttpServlet {
 
         } else {
             try {
-                User user = userRepository.getById(Integer.valueOf(substring[size]));
+                User user = userRepository.getById(Integer.valueOf(ending));
                 if (user != null) {
                     UserDTO userDTO = convert.convertToUserDTO(user);
                     String json = convert.convertUserDTOToJSON(userDTO);
@@ -61,9 +61,8 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        Integer id = request.getIntHeader("userid");//где брать новый ид
-        String userName = request.getHeader("username");// где брать новое имя
+        Integer id = request.getIntHeader("userid");
+        String userName = uriSubstring.uriSubstring(request);
         User user = User.builder()
                 .id(id)
                 .userName(userName)
@@ -75,8 +74,10 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = new User();
-        user.setUserName(request.getHeader("username"));
+        Integer id = request.getIntHeader("userid");
+        String ending = uriSubstring.uriSubstring(request);
+        User user = User.builder()
+                .userName(ending).build();
         user.setId(userRepository.save(user).getId());
         if(user.getId() != null) {
             UserDTO userDTO = convert.convertToUserDTO(user);

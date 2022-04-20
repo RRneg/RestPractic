@@ -12,6 +12,7 @@ import minaiev.restPractic.repository.SQLRepository.UserRepository;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateFileRepositoryImpl;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
 import javax.servlet.ServletException;
@@ -32,12 +33,14 @@ public class FilesRestControllerV1 extends HttpServlet {
     private final UserRepository userRepository = new HibernateUserRepositoryImpl();
     private final FileRepository fileRepository = new HibernateFileRepositoryImpl();
     private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
+    private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        File file = fileRepository.getById(request.getIntHeader("fileid"));
+        String ending = uriSubstring.uriSubstring(request);
+        File file = fileRepository.getById(Integer.valueOf(ending));
         ConvertFile convert = new ConvertFile();
         FileDTO fileDTO = convert.convertToFileDTO(file);
         String json = convert.fileDTOToJSON(fileDTO);
@@ -46,13 +49,11 @@ public class FilesRestControllerV1 extends HttpServlet {
         pw.write(json);
             }
 
-    public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = request.getIntHeader("userid");
-
-        String fileName = request.getHeader("filename");
+        String fileName = uriSubstring.uriSubstring(request);
         String directory = "/";
         String filePath = directory + fileName;
-
         URL url = new URL(request.getHeader("URIfile"));
 
         try (BufferedInputStream bf = new BufferedInputStream(url.openStream());
@@ -96,7 +97,7 @@ public class FilesRestControllerV1 extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        Integer id = request.getIntHeader("fileid");
+        Integer id = Integer.valueOf(uriSubstring.uriSubstring(request));
         try {
             fileRepository.deleteById(id);
         }

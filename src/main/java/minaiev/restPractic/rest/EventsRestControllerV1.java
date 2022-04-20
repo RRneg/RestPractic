@@ -6,6 +6,7 @@ import minaiev.restPractic.dto.EventDTO;
 import minaiev.restPractic.model.Event;
 import minaiev.restPractic.repository.SQLRepository.EventRepository;
 import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
+import minaiev.restPractic.util.URISubstring;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,15 +22,14 @@ public class EventsRestControllerV1 extends HttpServlet {
 
     private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
     private final ConvertEvent convert = new ConvertEvent();
+    private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getRequestURI();
-        String[] substring = url.split("/");
-        int size = substring.length;
-        if (substring[size - 1].equals("user")) {
+        String ending = uriSubstring.uriSubstring(request);
+        if (ending.equals("user")) {
             List<Event> events = eventRepository.getEventByUserId(request.getIntHeader("userid"));
             if (events != null) {
                 List<EventDTO> eventsDTO = convert.convertToListEventDTO(events);
