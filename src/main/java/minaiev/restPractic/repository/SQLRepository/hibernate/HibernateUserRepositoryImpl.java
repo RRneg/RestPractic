@@ -39,12 +39,12 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteById(Integer id) throws SessionException{
-            try (Session session = SQLUtil.getSession()) {
+                Session session = SQLUtil.getSession();
                 Transaction transaction = session.beginTransaction();
                 User user = session.get(User.class, id);
                 session.delete(user);
                 transaction.commit();
-            }
+                session.close();
        }
 
     @Override
