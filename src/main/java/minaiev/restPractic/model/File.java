@@ -3,7 +3,7 @@ package minaiev.restPractic.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @Builder
