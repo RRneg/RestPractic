@@ -17,6 +17,7 @@
     <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
     <tomcat.plugin.version>2.2</tomcat.plugin.version>
     <java.version>11.0.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>11.0.8</maven.compiler.source>
     <maven.compiler.target>11.0.8</maven.compiler.target>
 
@@ -101,7 +102,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
