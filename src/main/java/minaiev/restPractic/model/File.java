@@ -18,6 +18,7 @@ public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "file_path")
@@ -26,12 +27,10 @@ public class File {
     @Column(name = "file_name")
     private String fileName;
 
-
-
     @Column(name = "file_size")
     private Long fileSize;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "event")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
     private Event event;
 
 }

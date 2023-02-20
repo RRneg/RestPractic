@@ -5,11 +5,9 @@ import lombok.*;
 
 @JsonAutoDetect
 @Data
-@Builder
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class EventDTO {
 
     private Integer id;

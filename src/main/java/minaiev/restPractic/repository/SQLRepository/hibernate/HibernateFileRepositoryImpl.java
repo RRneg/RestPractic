@@ -15,7 +15,9 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public File getById(Integer id) {
         try (Session session = SQLUtil.getSession()) {
-            return session.get(File.class, id);
+            File file = session.get(File.class, id);
+            session.close();
+            return file;
         }
         catch (SessionException e){
             return null;
@@ -28,6 +30,7 @@ public class HibernateFileRepositoryImpl implements FileRepository {
             Transaction transaction = session.beginTransaction();
             session.update(file);
             transaction.commit();
+            session.close();
             return file;
         }
         catch (SessionException e){
@@ -44,7 +47,9 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public List<File> getAll() {
         try (Session session = SQLUtil.getSession()) {
-            return session.createQuery("FROM File").list();
+            List<File> files = session.createQuery("FROM File").list();
+            session.close();
+            return files;
         }
         catch (SessionException e) {
             return null;
@@ -57,6 +62,7 @@ public class HibernateFileRepositoryImpl implements FileRepository {
             Transaction transaction = session.beginTransaction();
             file.setId((Integer) session.save(file));
             transaction.commit();
+            session.close();
             return file;
         }
         catch (SessionException e){

@@ -4,40 +4,40 @@ import javax.persistence.*;
 import java.util.Date;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
+@Builder
 @Table(name = "events")
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "status")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private EventStatus eventStatus;
 
-    @Column(name = "updated")
-    private Date updated;
-
     @Column(name = "created")
+    @CreationTimestamp
     private Date created;
 
+    @Column(name = "updated")
+    @UpdateTimestamp
+    private Date updated;
 
-    @JoinColumns(name = "user_id")
-    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
-    @JoinColumns(name = "file_id")
-    @OneToOne
+    @JoinColumn(name = "file_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private File file;
-
 
 }

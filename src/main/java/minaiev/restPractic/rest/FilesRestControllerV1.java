@@ -64,13 +64,13 @@ public class FilesRestControllerV1 extends HttpServlet {
                 f.write(buffer, 0, count);
             }
 
-            java.io.File file = new java.io.File(filePath);
+            java.io.File fileIO = new java.io.File(filePath);
 
-            File file1 = File.builder()
+            File file = File.builder()
                     .filePath(filePath)
-                    .fileName(file.getName())
-                    .fileSize(file.length()).build();
-            file1 = fileRepository.save(file1);
+                    .fileName(fileIO.getName())
+                    .fileSize(fileIO.length()).build();
+            file = fileRepository.save(file);
 
             Event event = Event.builder()
                     .id(null)
@@ -78,12 +78,12 @@ public class FilesRestControllerV1 extends HttpServlet {
                     .updated(new Date())
                     .created(new Date())
                     .user((User) userRepository.getById(userId))
-                    .file(file1).build();
+                    .file(file).build();
 
             eventRepository.save(event);
 
             ConvertFile convert = new ConvertFile();
-            FileDTO fileDTO = convert.convertToFileDTO(file1);
+            FileDTO fileDTO = convert.convertToFileDTO(file);
             String json = convert.fileDTOToJSON(fileDTO);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();

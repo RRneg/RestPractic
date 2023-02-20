@@ -14,7 +14,9 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     public User getById(Integer id) {
         try (Session session = SQLUtil.getSession()) {
-            return session.get(User.class, id);
+            User user = session.get(User.class, id);
+            session.close();
+            return user;
             }
         catch (SessionException e){
             return null;
@@ -30,6 +32,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             query.setParameter("id", user.getId());
             query.executeUpdate();
             transaction.commit();
+            session.close();
             return user;
         }
         catch (SessionException e){
@@ -39,18 +42,24 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteById(Integer id) throws SessionException{
-                Session session = SQLUtil.getSession();
-                Transaction transaction = session.beginTransaction();
-                User user = session.get(User.class, id);
-                session.delete(user);
-                transaction.commit();
-                session.close();
+                try (Session session = SQLUtil.getSession();) {
+                    Transaction transaction = session.beginTransaction();
+                    User user = session.get(User.class, id);
+                    session.delete(user);
+                    transaction.commit();
+                    session.close();
+                }
+                catch (SessionException e){
+                    //doSomething
+                }
        }
 
     @Override
     public List<User> getAll() {
         try (Session session = SQLUtil.getSession();){
-        return session.createQuery("FROM User").list();
+            List<User> users = session.createQuery("FROM User").list();
+            session.close();
+            return users;
         }
         catch (SessionException e){
         return null;

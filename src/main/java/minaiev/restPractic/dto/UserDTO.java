@@ -5,12 +5,9 @@ import lombok.*;
 
 
 @JsonAutoDetect
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Builder
 public class UserDTO {
     private Integer id;
     private String name;
