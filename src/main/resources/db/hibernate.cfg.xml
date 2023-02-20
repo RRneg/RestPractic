@@ -20,6 +20,7 @@
         <property name="hibernate.connection.password">
             Rfvbgt79
         </property>
+        <property name="hibernate.connection.pool_size">1</property>
 
         <mapping class="minaiev.restPractic.model.Event"/>
         <mapping class="minaiev.restPractic.model.File"/>
