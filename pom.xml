@@ -7,11 +7,9 @@
   <groupId>org.example</groupId>
   <artifactId>RestPractic</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-
-  <name>RestPractic Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <packaging>war</packaging>
+  <name>RestPractic</name>
+  <url>http://maven.apache.org</url>
 
   <properties>
     <javax.servlet.api.version>3.0.1</javax.servlet.api.version>
