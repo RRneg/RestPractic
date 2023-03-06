@@ -1,7 +1,6 @@
 package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertFile;
-import minaiev.restPractic.dto.FileDTO;
 import minaiev.restPractic.model.Event;
 import minaiev.restPractic.model.EventStatus;
 import minaiev.restPractic.model.File;
