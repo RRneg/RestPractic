@@ -10,18 +10,19 @@ import java.util.stream.Collectors;
 
 public class ConvertUser {
 
-    public UserDTO convertToUserDTO(User user) {
+    private UserDTO convertToUserDTO(User user) {
         UserDTO userDTO = UserDTO.builder()
                 .id(user.getId())
                 .name(user.getUserName()).build();
         return userDTO;
     }
 
-    public List<UserDTO> convertToListUserDTO(List<User> users) {
+    private List<UserDTO> convertToListUserDTO(List<User> users) {
         return users.stream().map(user -> convertToUserDTO(user)).collect(Collectors.toList());
     }
 
-    public String convertUserDTOToJSON(UserDTO userDTO){
+    public String convertUserToJSON(User user){
+        UserDTO userDTO = convertToUserDTO(user);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(userDTO);
@@ -32,7 +33,8 @@ public class ConvertUser {
         }
     }
 
-    public String convertListUsersDTOToJSON(List<UserDTO> usersDTO){
+    public String convertListUsersToJSON(List<User> users){
+        List<UserDTO> usersDTO = convertToListUserDTO(users);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(usersDTO);

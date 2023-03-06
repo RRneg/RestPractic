@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet(value = "/api/v1/files/*")
@@ -39,14 +40,29 @@ public class FilesRestControllerV1 extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String ending = uriSubstring.uriSubstring(request);
-        File file = fileRepository.getById(Integer.valueOf(ending));
-        ConvertFile convert = new ConvertFile();
-        FileDTO fileDTO = convert.convertToFileDTO(file);
-        String json = convert.fileDTOToJSON(fileDTO);
-        response.setContentType("application/json");
-        PrintWriter pw = response.getWriter();
-        pw.write(json);
+        Integer header = request.getIntHeader("userId");
+        if (header == null) {
+            String ending = uriSubstring.uriSubstring(request);
+            File file = fileRepository.getById(Integer.valueOf(ending));
+            if(file != null) {
+                ConvertFile convert = new ConvertFile();
+                String json = convert.fileoJSON(file);
+                response.setContentType("application/json");
+                PrintWriter pw = response.getWriter();
+                pw.write(json);
+            }
+            else{response.setStatus(500);}
+        }
+        else {
+            HibernateFileRepositoryImpl.setUser_Id(header);
+            List<File> files = fileRepository.getAll();
+            if (files != null){
+                ConvertFile convert = new ConvertFile();
+                String json = convert.listFilesToJSON(files);
+
+            }
+            else {response.setStatus(500);}
+        }
             }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -83,8 +99,7 @@ public class FilesRestControllerV1 extends HttpServlet {
             eventRepository.save(event);
 
             ConvertFile convert = new ConvertFile();
-            FileDTO fileDTO = convert.convertToFileDTO(file);
-            String json = convert.fileDTOToJSON(fileDTO);
+            String json = convert.fileoJSON(file);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
             pw.write(json);

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ConvertFile {
 
-    public FileDTO convertToFileDTO(File file) {
+    private FileDTO convertToFileDTO(File file) {
         FileDTO fileDTO = FileDTO.builder()
                 .id(file.getId())
                 .filePath(file.getFilePath())
@@ -19,11 +19,12 @@ public class ConvertFile {
         return fileDTO;
     }
 
-    public List<FileDTO> convertToListFileDTO(List<File> files) {
+    private List<FileDTO> convertToListFileDTO(List<File> files) {
         return files.stream().map(file -> convertToFileDTO(file)).collect(Collectors.toList());
     }
 
-    public String fileDTOToJSON(FileDTO fileDTO){
+    public String fileoJSON(File file){
+        FileDTO fileDTO = convertToFileDTO(file);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(fileDTO);
@@ -34,7 +35,8 @@ public class ConvertFile {
         }
     }
 
-    public String listFilesDTOToJSON(List<FileDTO> filesDTOS){
+    public String listFilesToJSON(List<File> files){
+        List<FileDTO> filesDTOS =  convertToListFileDTO(files);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(filesDTOS);

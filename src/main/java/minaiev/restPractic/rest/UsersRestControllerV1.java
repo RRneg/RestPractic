@@ -33,8 +33,7 @@ public class UsersRestControllerV1 extends HttpServlet {
         if (ending.equals("users")) {
             List<User> users = userRepository.getAll();
             if(users != null) {
-                List<UserDTO> usersDTO = convert.convertToListUserDTO(users);
-                String json = convert.convertListUsersDTOToJSON(usersDTO);
+                String json = convert.convertListUsersToJSON(users);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
@@ -45,8 +44,7 @@ public class UsersRestControllerV1 extends HttpServlet {
             try {
                 User user = userRepository.getById(Integer.valueOf(ending));
                 if (user != null) {
-                    UserDTO userDTO = convert.convertToUserDTO(user);
-                    String json = convert.convertUserDTOToJSON(userDTO);
+                    String json = convert.convertUserToJSON(user);
                     response.setContentType("application/json");
                     PrintWriter pw = response.getWriter();
                     pw.write(json);
@@ -74,14 +72,12 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer id = request.getIntHeader("userid");
         String ending = uriSubstring.uriSubstring(request);
         User user = User.builder()
                 .userName(ending).build();
         user.setId(userRepository.save(user).getId());
         if(user.getId() != null) {
-            UserDTO userDTO = convert.convertToUserDTO(user);
-            String json = convert.convertUserDTOToJSON(userDTO);
+            String json = convert.convertUserToJSON(user);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
             pw.write(json);
