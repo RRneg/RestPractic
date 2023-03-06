@@ -28,20 +28,36 @@ public class EventsRestControllerV1 extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String ending = uriSubstring.uriSubstring(request);
-        if (ending.equals("user")) {
-            List<Event> events = eventRepository.getEventByUserId(request.getIntHeader("userid"));
+        Integer fileId = request.getIntHeader("fileid");
+        Integer userId = request.getIntHeader("userid");
+        if (fileId == null) {
+            List<Event> events = eventRepository.getEventByUserId(userId);
             if (events != null) {
-                List<EventDTO> eventsDTO = convert.convertToListEventDTO(events);
-                String json = convert.convertListEventDTOToJSON(eventsDTO);
+                String json = convert.convertListEventToJSON(events);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
 
-            } else {
+            }
+            else {
                 response.setStatus(500);
             }
         }
+        else {
+            if (userId == null){
+                Event event = eventRepository.getById(fileId);
+                if(event != null){
+                    String json = convert.convertEventToJSON(event);
+                    response.setContentType("application/json");
+                    PrintWriter pw = response.getWriter();
+                    pw.write(json);
+
+                }
+                else {
+                    response.setStatus(500);
+                }
+            }
+            }
     }
 
 

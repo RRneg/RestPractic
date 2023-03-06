@@ -18,7 +18,8 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
     public List<Event> getEventByUserId(Integer userId) {
         try (Session session = SQLUtil.getSession()){
-        Query query = session.createQuery("FROM Event E WHERE E.user_id = :userId");
+        Query query = session.createQuery("FROM Event E WHERE E.user_id = :userId")
+                .setParameter("userId", userId);
         List<Event> events = query.list();
         session.close();
         return events;
@@ -53,8 +54,14 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
 
     @Override
-    public Event getById(Integer integer) {
-        return null;
+    public Event getById(Integer eventId) {
+        try (Session session = SQLUtil.getSession()) {
+            return (Event) session.createQuery("FROM Event E WHERE E.id = :eventId").
+                    setParameter("eventId", eventId).getSingleResult();
+        }
+        catch (SessionException e) {
+            return null;
+        }
     }
 
     @Override

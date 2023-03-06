@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class ConvertEvent {
 
 
-    public EventDTO convertToEventDTO(Event event) {
+    private EventDTO convertToEventDTO(Event event) {
         EventDTO eventDTO = EventDTO.builder()
                 .id(event.getId())
                 .eventStatus(event.getEventStatus().toString())
@@ -24,11 +24,12 @@ public class ConvertEvent {
         return eventDTO;
     }
 
-    public List<EventDTO> convertToListEventDTO(List<Event> events) {
+    private List<EventDTO> convertToListEventDTO(List<Event> events) {
         return events.stream().map(event -> convertToEventDTO(event)).collect(Collectors.toList());
     }
 
-    public String convertEventDTOToJSON(EventDTO eventDTO){
+    public String convertEventToJSON(Event event){
+        EventDTO eventDTO = convertToEventDTO(event);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(eventDTO);
@@ -39,7 +40,8 @@ public class ConvertEvent {
         }
     }
 
-    public String convertListEventDTOToJSON(List<EventDTO> eventsDTOS){
+    public String convertListEventToJSON(List<Event> events){
+        List<EventDTO> eventsDTOS = convertToListEventDTO(events);
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writeValueAsString(eventsDTOS);

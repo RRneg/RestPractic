@@ -59,7 +59,9 @@ public class FilesRestControllerV1 extends HttpServlet {
             if (files != null){
                 ConvertFile convert = new ConvertFile();
                 String json = convert.listFilesToJSON(files);
-
+                response.setContentType("application/json");
+                PrintWriter pw = response.getWriter();
+                pw.write(json);
             }
             else {response.setStatus(500);}
         }
