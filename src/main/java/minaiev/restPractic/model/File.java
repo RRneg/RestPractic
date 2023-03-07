@@ -30,7 +30,7 @@ public class File {
     @Column(name = "file_size")
     private Long fileSize;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "event")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "events")
     private Event event;
 
 }
