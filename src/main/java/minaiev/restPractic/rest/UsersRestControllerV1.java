@@ -95,6 +95,7 @@ public class UsersRestControllerV1 extends HttpServlet {
         }
         catch (SessionException e){
             response.setStatus(500);
+
         }
     }
 
