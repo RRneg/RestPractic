@@ -2,8 +2,6 @@ package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertUser;
 import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.hibernateRepository.UserRepository;
-import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateUserRepositoryImpl;
 import minaiev.restPractic.service.UserService;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
@@ -59,25 +57,21 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer id = request.getIntHeader("userid");
-        String userName = uriSubstring.uriSubstring(request);
-        User user = User.builder()
-                .id(id)
-                .userName(userName)
-                .events(null).build();
-        User userUPD = userService.update(user);
-        if(userUPD.getUserName() !=userName){
-            response.setStatus(500);
-        }
+       String jsonUser = request.getParameter("user");
+       User user = convert.convertJSONToUser(jsonUser);
+       User updatingUser = userService.update(user);
+        if(updatingUser.getUserName() !=user.getUserName()){
+                response.setStatus(500);
+             }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String ending = uriSubstring.uriSubstring(request);
-        User user = User.builder()
-                .userName(ending).build();
-        user.setId(userService.save(user).getId());
-        if(user.getId() != null) {
-            String json = convert.convertUserToJSON(user);
+        String jsonUser = request.getParameter("user");
+        User user = convert.convertJSONToUser(jsonUser);
+        User savingUser = userService.save(user);
+
+        if(savingUser.getId() != null) {
+            String json = convert.convertUserToJSON(savingUser);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
             pw.write(json);

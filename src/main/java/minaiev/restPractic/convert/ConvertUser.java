@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import minaiev.restPractic.dto.UserDTO;
 import minaiev.restPractic.model.User;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,4 +45,18 @@ public class ConvertUser {
             return null;
         }
     }
+
+    public User convertJSONToUser(String json)  {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            User user = objectMapper.readValue(json, User.class);
+            return user;
+        }
+        catch (IOException e){
+            return null;
+        }
+    }
+
+
+
 }
