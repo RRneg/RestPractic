@@ -1,4 +1,4 @@
-package minaiev.restPractic.repository.SQLRepository;
+package minaiev.restPractic.repository.hibernateRepository;
 
 import minaiev.restPractic.model.File;
 

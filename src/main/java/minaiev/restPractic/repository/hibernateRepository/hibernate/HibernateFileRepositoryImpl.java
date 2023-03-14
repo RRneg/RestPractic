@@ -1,9 +1,8 @@
-package minaiev.restPractic.repository.SQLRepository.hibernate;
+package minaiev.restPractic.repository.hibernateRepository.hibernate;
 
 import minaiev.restPractic.model.File;
-import minaiev.restPractic.repository.SQLRepository.EventRepository;
-import minaiev.restPractic.repository.SQLRepository.FileRepository;
-import minaiev.restPractic.repository.SQLRepository.GenericRepository;
+import minaiev.restPractic.repository.hibernateRepository.EventRepository;
+import minaiev.restPractic.repository.hibernateRepository.FileRepository;
 import minaiev.restPractic.util.SQLUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionException;

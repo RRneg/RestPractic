@@ -2,10 +2,9 @@ package minaiev.restPractic.rest;
 
 
 import minaiev.restPractic.convert.ConvertEvent;
-import minaiev.restPractic.dto.EventDTO;
 import minaiev.restPractic.model.Event;
-import minaiev.restPractic.repository.SQLRepository.EventRepository;
-import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
+import minaiev.restPractic.repository.hibernateRepository.EventRepository;
+import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateEventRepositoryImpl;
 import minaiev.restPractic.util.URISubstring;
 
 import javax.servlet.ServletException;

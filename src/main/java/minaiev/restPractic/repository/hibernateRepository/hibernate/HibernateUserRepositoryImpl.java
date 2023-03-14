@@ -1,7 +1,7 @@
-package minaiev.restPractic.repository.SQLRepository.hibernate;
+package minaiev.restPractic.repository.hibernateRepository.hibernate;
 
 import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.SQLRepository.UserRepository;
+import minaiev.restPractic.repository.hibernateRepository.UserRepository;
 import minaiev.restPractic.util.SQLUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionException;

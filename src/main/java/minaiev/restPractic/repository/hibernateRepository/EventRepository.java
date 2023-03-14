@@ -1,7 +1,6 @@
-package minaiev.restPractic.repository.SQLRepository;
+package minaiev.restPractic.repository.hibernateRepository;
 
 import minaiev.restPractic.model.Event;
-import minaiev.restPractic.repository.SQLRepository.GenericRepository;
 
 import java.util.List;
 

@@ -1,10 +1,9 @@
 package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertUser;
-import minaiev.restPractic.dto.UserDTO;
 import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.SQLRepository.UserRepository;
-import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.repository.hibernateRepository.UserRepository;
+import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateUserRepositoryImpl;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 

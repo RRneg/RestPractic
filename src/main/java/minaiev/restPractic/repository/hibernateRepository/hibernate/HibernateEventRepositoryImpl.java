@@ -1,17 +1,13 @@
-package minaiev.restPractic.repository.SQLRepository.hibernate;
+package minaiev.restPractic.repository.hibernateRepository.hibernate;
 
 import minaiev.restPractic.model.Event;
-import minaiev.restPractic.model.EventStatus;
-import minaiev.restPractic.model.File;
-import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.SQLRepository.EventRepository;
+import minaiev.restPractic.repository.hibernateRepository.EventRepository;
 import minaiev.restPractic.util.SQLUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.Date;
 import java.util.List;
 
 public class HibernateEventRepositoryImpl implements EventRepository {

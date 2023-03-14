@@ -5,12 +5,12 @@ import minaiev.restPractic.model.Event;
 import minaiev.restPractic.model.EventStatus;
 import minaiev.restPractic.model.File;
 import minaiev.restPractic.model.User;
-import minaiev.restPractic.repository.SQLRepository.EventRepository;
-import minaiev.restPractic.repository.SQLRepository.FileRepository;
-import minaiev.restPractic.repository.SQLRepository.UserRepository;
-import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateEventRepositoryImpl;
-import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateFileRepositoryImpl;
-import minaiev.restPractic.repository.SQLRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.repository.hibernateRepository.EventRepository;
+import minaiev.restPractic.repository.hibernateRepository.FileRepository;
+import minaiev.restPractic.repository.hibernateRepository.UserRepository;
+import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateEventRepositoryImpl;
+import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateFileRepositoryImpl;
+import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateUserRepositoryImpl;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
