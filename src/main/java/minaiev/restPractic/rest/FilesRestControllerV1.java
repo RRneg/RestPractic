@@ -33,6 +33,8 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     private final FileService fileService = new FileService();
     private final URISubstring uriSubstring = new URISubstring();
+    private final ConvertFile convert = new ConvertFile();
+
 
     public void init() throws ServletException {
     }
@@ -88,7 +90,7 @@ public class FilesRestControllerV1 extends HttpServlet {
             file = fileService.saveFile(file, userId);
 
 
-            ConvertFile convert = new ConvertFile();
+
             String json = convert.fileoJSON(file);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
