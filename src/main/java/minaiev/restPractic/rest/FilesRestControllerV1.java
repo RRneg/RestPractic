@@ -11,6 +11,7 @@ import minaiev.restPractic.repository.hibernateRepository.UserRepository;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateEventRepositoryImpl;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateFileRepositoryImpl;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.service.FileService;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
@@ -30,9 +31,8 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(value = "/api/v1/files/*")
 public class FilesRestControllerV1 extends HttpServlet {
 
-    private final UserRepository userRepository = new HibernateUserRepositoryImpl();
+    private final FileService fileService = new FileService();
     private final FileRepository fileRepository = new HibernateFileRepositoryImpl();
-    private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
     private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
@@ -42,7 +42,7 @@ public class FilesRestControllerV1 extends HttpServlet {
         Integer header = request.getIntHeader("userId");
         if (header == null) {
             String ending = uriSubstring.uriSubstring(request);
-            File file = fileRepository.getById(Integer.valueOf(ending));
+            File file = fileService.getById(Integer.valueOf(ending));
             if(file != null) {
                 ConvertFile convert = new ConvertFile();
                 String json = convert.fileoJSON(file);
@@ -54,7 +54,7 @@ public class FilesRestControllerV1 extends HttpServlet {
         }
         else {
             HibernateFileRepositoryImpl.setUser_Id(header);
-            List<File> files = fileRepository.getAll();
+            List<File> files = fileService.getAllFiles();
             if (files != null){
                 ConvertFile convert = new ConvertFile();
                 String json = convert.listFilesToJSON(files);
@@ -87,17 +87,8 @@ public class FilesRestControllerV1 extends HttpServlet {
                     .filePath(filePath)
                     .fileName(fileIO.getName())
                     .fileSize(fileIO.length()).build();
-            file = fileRepository.save(file);
+            file = fileService.saveFile(file, userId);
 
-            Event event = Event.builder()
-                    .id(null)
-                    .eventStatus(EventStatus.ACTIVE)
-                    .updated(new Date())
-                    .created(new Date())
-                    .user((User) userRepository.getById(userId))
-                    .file(file).build();
-
-            eventRepository.save(event);
 
             ConvertFile convert = new ConvertFile();
             String json = convert.fileoJSON(file);
@@ -115,7 +106,7 @@ public class FilesRestControllerV1 extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
         Integer id = Integer.valueOf(uriSubstring.uriSubstring(request));
         try {
-            fileRepository.deleteById(id);
+            fileService.deleteFileById(id);
         }
         catch (SessionException e){
             response.setStatus(500);

@@ -49,10 +49,7 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public void deleteById(Integer id) throws SessionException{
-        EventRepository eventRepository = new HibernateEventRepositoryImpl();
-        eventRepository.setDelStatus(id);
-    }
+    public void deleteById(Integer id){}
 
     @Override
     public List<File> getAll() {

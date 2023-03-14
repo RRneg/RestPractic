@@ -50,10 +50,10 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
 
     @Override
-    public Event getById(Integer eventId) {
+    public Event getById(Integer fileId) {
         try (Session session = SQLUtil.getSession()) {
-            return (Event) session.createQuery("FROM Event E WHERE E.id = :eventId").
-                    setParameter("eventId", eventId).getSingleResult();
+            return (Event) session.createQuery("FROM Event E WHERE E.file_id = :fileId").
+                    setParameter("fileId", fileId).getSingleResult();
         }
         catch (SessionException e) {
             return null;

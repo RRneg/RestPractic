@@ -5,6 +5,7 @@ import minaiev.restPractic.convert.ConvertEvent;
 import minaiev.restPractic.model.Event;
 import minaiev.restPractic.repository.hibernateRepository.EventRepository;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateEventRepositoryImpl;
+import minaiev.restPractic.service.EventService;
 import minaiev.restPractic.util.URISubstring;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(value = "/api/v1/events/*")
 public class EventsRestControllerV1 extends HttpServlet {
 
+    private final EventService eventService = new EventService();
     private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
     private final ConvertEvent convert = new ConvertEvent();
     private final URISubstring uriSubstring = new URISubstring();
@@ -30,7 +32,7 @@ public class EventsRestControllerV1 extends HttpServlet {
         Integer fileId = request.getIntHeader("fileid");
         Integer userId = request.getIntHeader("userid");
         if (fileId == null) {
-            List<Event> events = eventRepository.getEventByUserId(userId);
+            List<Event> events = eventService.getEventByUserId(userId);
             if (events != null) {
                 String json = convert.convertListEventToJSON(events);
                 response.setContentType("application/json");
@@ -44,7 +46,7 @@ public class EventsRestControllerV1 extends HttpServlet {
         }
         else {
             if (userId == null){
-                Event event = eventRepository.getById(fileId);
+                Event event = eventService.getEventByFileId(fileId);//Get Event by FileId
                 if(event != null){
                     String json = convert.convertEventToJSON(event);
                     response.setContentType("application/json");
