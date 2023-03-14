@@ -30,8 +30,8 @@ public class FileService {
     }
 
 
-    public List<File> getAllFiles(){
-
+    public List<File> getAllFiles(Integer userId){
+        HibernateFileRepositoryImpl.setUser_Id(userId);
         return fileRepository.getAll();
     }
 

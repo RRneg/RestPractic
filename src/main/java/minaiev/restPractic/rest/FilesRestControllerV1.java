@@ -52,8 +52,7 @@ public class FilesRestControllerV1 extends HttpServlet {
             else{response.setStatus(500);}
         }
         else {
-            HibernateFileRepositoryImpl.setUser_Id(header);
-            List<File> files = fileService.getAllFiles();
+            List<File> files = fileService.getAllFiles(header);
             if (files != null){
                 ConvertFile convert = new ConvertFile();
                 String json = convert.listFilesToJSON(files);
