@@ -32,7 +32,6 @@ import javax.servlet.annotation.WebServlet;
 public class FilesRestControllerV1 extends HttpServlet {
 
     private final FileService fileService = new FileService();
-    private final FileRepository fileRepository = new HibernateFileRepositoryImpl();
     private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
