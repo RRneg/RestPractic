@@ -4,6 +4,7 @@ import minaiev.restPractic.convert.ConvertUser;
 import minaiev.restPractic.model.User;
 import minaiev.restPractic.repository.hibernateRepository.UserRepository;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateUserRepositoryImpl;
+import minaiev.restPractic.service.UserService;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
@@ -19,7 +20,7 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(value = "/api/v1/users/*")
 public class UsersRestControllerV1 extends HttpServlet {
 
-    private final UserRepository userRepository = new HibernateUserRepositoryImpl();
+    private final UserService userService = new UserService();
     private final ConvertUser convert = new ConvertUser();
     private final URISubstring uriSubstring = new URISubstring();
 
@@ -30,7 +31,7 @@ public class UsersRestControllerV1 extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ending = uriSubstring.uriSubstring(request);
         if (ending.equals("users")) {
-            List<User> users = userRepository.getAll();
+            List<User> users = userService.getAll();
             if(users != null) {
                 String json = convert.convertListUsersToJSON(users);
                 response.setContentType("application/json");
@@ -41,7 +42,7 @@ public class UsersRestControllerV1 extends HttpServlet {
 
         } else {
             try {
-                User user = userRepository.getById(Integer.valueOf(ending));
+                User user = userService.getById(Integer.valueOf(ending));
                 if (user != null) {
                     String json = convert.convertUserToJSON(user);
                     response.setContentType("application/json");
@@ -64,7 +65,7 @@ public class UsersRestControllerV1 extends HttpServlet {
                 .id(id)
                 .userName(userName)
                 .events(null).build();
-        User userUPD = userRepository.update(user);
+        User userUPD = userService.update(user);
         if(userUPD.getUserName() !=userName){
             response.setStatus(500);
         }
@@ -74,7 +75,7 @@ public class UsersRestControllerV1 extends HttpServlet {
         String ending = uriSubstring.uriSubstring(request);
         User user = User.builder()
                 .userName(ending).build();
-        user.setId(userRepository.save(user).getId());
+        user.setId(userService.save(user).getId());
         if(user.getId() != null) {
             String json = convert.convertUserToJSON(user);
             response.setContentType("application/json");
@@ -90,7 +91,7 @@ public class UsersRestControllerV1 extends HttpServlet {
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            userRepository.deleteById(request.getIntHeader("userid"));
+            userService.deleteById(request.getIntHeader("userid"));
         }
         catch (SessionException e){
             response.setStatus(500);
