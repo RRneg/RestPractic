@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import minaiev.restPractic.dto.FileDTO;
 import minaiev.restPractic.model.File;
+import minaiev.restPractic.model.User;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +25,7 @@ public class ConvertFile {
         return files.stream().map(file -> convertToFileDTO(file)).collect(Collectors.toList());
     }
 
-    public String fileoJSON(File file){
+    public String convertFileToJSON(File file){
         FileDTO fileDTO = convertToFileDTO(file);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -35,7 +37,7 @@ public class ConvertFile {
         }
     }
 
-    public String listFilesToJSON(List<File> files){
+    public String convertListFilesToJSON(List<File> files){
         List<FileDTO> filesDTOS =  convertToListFileDTO(files);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -43,6 +45,17 @@ public class ConvertFile {
             return json;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public File convertJsonToFile(String fileJSON){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file = objectMapper.readValue(fileJSON, File.class);
+            return file;
+        }
+        catch (IOException e){
             return null;
         }
     }
