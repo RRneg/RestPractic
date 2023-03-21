@@ -12,14 +12,17 @@ private final HibernateEventRepositoryImpl eventRepository = new HibernateEventR
 
 
     public Event save(Event event){
-        return event;
+
+        return eventRepository.save(event);
     }
 
     public List<Event> getEventByUserId(Integer userId){
+
         return eventRepository.getEventByUserId(userId);
     }
 
     public void setDelStatus(Integer fileId){
+
         eventRepository.setDelStatus(fileId);
     }
 

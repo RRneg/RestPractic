@@ -29,10 +29,9 @@ public class EventsRestControllerV1 extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer fileId = request.getIntHeader("fileid");
-        Integer userId = request.getIntHeader("userid");
-        if (fileId == null) {
-            List<Event> events = eventService.getEventByUserId(userId);
+        String ending = uriSubstring.uriSubstring(request);
+        if (ending == "files") {
+            List<Event> events = eventService.getEventByUserId(request.getIntHeader("userId"));
             if (events != null) {
                 String json = convert.convertListEventToJSON(events);
                 response.setContentType("application/json");
@@ -45,8 +44,8 @@ public class EventsRestControllerV1 extends HttpServlet {
             }
         }
         else {
-            if (userId == null){
-                Event event = eventService.getEventByFileId(fileId);//Get Event by FileId
+            if (ending == "file"){
+                Event event = eventService.getEventByFileId(request.getIntHeader("fileId"));
                 if(event != null){
                     String json = convert.convertEventToJSON(event);
                     response.setContentType("application/json");

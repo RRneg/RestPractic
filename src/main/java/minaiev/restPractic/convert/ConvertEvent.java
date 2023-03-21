@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import minaiev.restPractic.dto.EventDTO;
 import minaiev.restPractic.model.Event;
+import minaiev.restPractic.model.User;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,17 @@ public class ConvertEvent {
             return json;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Event convertJSONtoEvent(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Event event = mapper.readValue(json, Event.class);
+            return event;
+        }
+        catch (IOException e){
             return null;
         }
     }

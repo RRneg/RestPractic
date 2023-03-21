@@ -76,6 +76,8 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     }
 
+
+
     public void doDelete(HttpServletRequest request, HttpServletResponse response) {
         Integer id = Integer.valueOf(uriSubstring.uriSubstring(request));
         try {
