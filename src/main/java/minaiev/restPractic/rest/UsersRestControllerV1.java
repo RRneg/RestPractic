@@ -63,6 +63,12 @@ public class UsersRestControllerV1 extends HttpServlet {
         if(updatingUser.getUserName() !=user.getUserName()){
                 response.setStatus(500);
              }
+        else {
+            String json = convert.convertUserToJSON(updatingUser);
+            response.setContentType("application/json");
+            PrintWriter pw = response.getWriter();
+            pw.write(json);
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
