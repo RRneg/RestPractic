@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -30,13 +31,14 @@ public class UsersRestControllerV1 extends HttpServlet {
         String ending = uriSubstring.uriSubstring(request);
         if (ending.equals("users")) {
             List<User> users = userService.getAll();
-            if(users != null) {
+            if (users != null) {
                 String json = convert.convertListUsersToJSON(users);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
+            } else {
+                response.setStatus(500);
             }
-            else {response.setStatus(500);}
 
         } else {
             try {
@@ -57,13 +59,11 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       String jsonUser = request.getParameter("user");
-       User user = convert.convertJSONToUser(jsonUser);
-       User updatingUser = userService.update(user);
-        if(updatingUser.getUserName() !=user.getUserName()){
-                response.setStatus(500);
-             }
-        else {
+        User user = getJson(request);
+        User updatingUser = userService.update(user);
+        if (updatingUser.getUserName() != user.getUserName()) {
+            response.setStatus(500);
+        } else {
             String json = convert.convertUserToJSON(updatingUser);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
@@ -72,17 +72,14 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String jsonUser = request.getParameter("user");
-        User user = convert.convertJSONToUser(jsonUser);
+        User user = getJson(request);
         User savingUser = userService.save(user);
-
-        if(savingUser.getId() != null) {
+        if (savingUser.getId() != null) {
             String json = convert.convertUserToJSON(savingUser);
             response.setContentType("application/json");
             PrintWriter pw = response.getWriter();
             pw.write(json);
-        }
-        else {
+        } else {
             response.setStatus(500);
         }
 
@@ -92,8 +89,7 @@ public class UsersRestControllerV1 extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             userService.deleteById(request.getIntHeader("userid"));
-        }
-        catch (SessionException e){
+        } catch (SessionException e) {
             response.setStatus(500);
 
         }
@@ -102,5 +98,20 @@ public class UsersRestControllerV1 extends HttpServlet {
 
     public void destroy() {
 
+    }
+
+
+    private User getJson(HttpServletRequest request){
+        StringBuffer sb = new StringBuffer();
+        String line = null;
+        try {
+        BufferedReader reader = request.getReader();
+         while ((line = reader.readLine()) != null)
+         sb.append(line);
+         return convert.convertJSONToUser(sb.toString());
+        }
+        catch (IOException e){
+        return null;
+        }
     }
 }
