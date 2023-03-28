@@ -2,8 +2,8 @@ package minaiev.restPractic.rest;
 
 import minaiev.restPractic.convert.ConvertFile;
 import minaiev.restPractic.model.File;
-import minaiev.restPractic.model.User;
 import minaiev.restPractic.service.FileService;
+import minaiev.restPractic.util.GetJson;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,6 +24,7 @@ public class FilesRestControllerV1 extends HttpServlet {
     private final FileService fileService = new FileService();
     private final URISubstring uriSubstring = new URISubstring();
     private final ConvertFile convert = new ConvertFile();
+    private final GetJson getJson = new GetJson();
 
 
     public void init() throws ServletException {
@@ -60,7 +60,7 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = request.getIntHeader("userid");
-        File file = getJson(request);
+        File file = getJson.getFileJson(request);
         URL url = new URL(request.getRequestURI());
 
         try  {
@@ -92,17 +92,5 @@ public class FilesRestControllerV1 extends HttpServlet {
     }
 
 
-    private File getJson(HttpServletRequest request){
-        StringBuffer sb = new StringBuffer();
-        String line = null;
-        try {
-            BufferedReader reader = request.getReader();
-            while ((line = reader.readLine()) != null)
-                sb.append(line);
-            return convert.convertJsonToFile(sb.toString());
-        }
-        catch (IOException e){
-            return null;
-        }
-    }
+
 }

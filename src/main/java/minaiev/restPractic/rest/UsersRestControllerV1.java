@@ -3,6 +3,7 @@ package minaiev.restPractic.rest;
 import minaiev.restPractic.convert.ConvertUser;
 import minaiev.restPractic.model.User;
 import minaiev.restPractic.service.UserService;
+import minaiev.restPractic.util.GetJson;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
@@ -21,6 +22,7 @@ public class UsersRestControllerV1 extends HttpServlet {
 
     private final UserService userService = new UserService();
     private final ConvertUser convert = new ConvertUser();
+    private final GetJson getJson = new GetJson();
     private final URISubstring uriSubstring = new URISubstring();
 
     public void init() throws ServletException {
@@ -59,7 +61,7 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = getJson(request);
+        User user = getJson.getUserJSON(request);
         User updatingUser = userService.update(user);
         if (updatingUser.getUserName() != user.getUserName()) {
             response.setStatus(500);
@@ -72,7 +74,7 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = getJson(request);
+        User user = getJson.getUserJSON(request);
         User savingUser = userService.save(user);
         if (savingUser.getId() != null) {
             String json = convert.convertUserToJSON(savingUser);
@@ -100,18 +102,4 @@ public class UsersRestControllerV1 extends HttpServlet {
 
     }
 
-
-    private User getJson(HttpServletRequest request){
-        StringBuffer sb = new StringBuffer();
-        String line = null;
-        try {
-        BufferedReader reader = request.getReader();
-         while ((line = reader.readLine()) != null)
-         sb.append(line);
-         return convert.convertJSONToUser(sb.toString());
-        }
-        catch (IOException e){
-        return null;
-        }
-    }
 }
