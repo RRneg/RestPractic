@@ -88,8 +88,9 @@ public class UsersRestControllerV1 extends HttpServlet {
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String ending = uriSubstring.uriSubstring(request);
         try {
-            userService.deleteById(request.getIntHeader("userid"));
+            userService.deleteById(Integer.valueOf(ending));
         } catch (SessionException e) {
             response.setStatus(500);
 
