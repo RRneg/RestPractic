@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -41,32 +42,23 @@ public class FileService {
         return fileRepository.getAll();
     }
 
-    private void saveFile(String fileName, URL url) throws IOException {
-        BufferedInputStream bf = new BufferedInputStream(url.openStream());
-        String filePath = fileDisk + fileName;
-        FileOutputStream f = new FileOutputStream(filePath);
-        byte[] buffer = new byte[1024];
-        int count = 0;
-        while ((count = bf.read(buffer, 0, 1024)) != -1) {
-            f.write(buffer, 0, count);
-        }
-    }
 
-    public File save(File file, Integer userId, URL url) throws IOException {
-        saveFile(file.getFileName(), url);
-        file.setFilePath(fileDisk + file.getFileName());
+
+    public File save(File file, Integer userId) throws IOException {
+
+        File file1 = fileRepository.save(file);
 
         Event event = Event.builder()
                 .id(null)
                 .eventStatus(EventStatus.ACTIVE)
                 .updated(new Date())
                 .created(new Date())
-                .user((User) userService.getById(userId))
-                .file(file).build();
+                .userId(userId)
+                .fileId(file1.getId()).build();
 
         eventService.save(event);
 
-        return fileRepository.save(file);
+        return file1;
     }
 
 }

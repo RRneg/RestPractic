@@ -8,16 +8,18 @@ import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Part;
 
 @WebServlet(value = "/api/v1/files/*")
+@MultipartConfig(location = "src/main/resources/uploads")
 public class FilesRestControllerV1 extends HttpServlet {
 
     private final FileService fileService = new FileService();
@@ -59,15 +61,25 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer userId = request.getIntHeader("userid");
-        File file = getJson.getFileJson(request);
-        URL url = new URL(request.getRequestURI());
-
-        try  {
-            File file1 = fileService.save(file, userId, url);
-            String json = convert.convertFileToJSON(file1);
-            response.setContentType("application/json");
-            PrintWriter pw = response.getWriter();
-            pw.write(json);
+        String fileName;
+        Long fileSize;
+        try {
+            for (Part part : request.getParts()) {
+                fileName = part.getName();   //Could I get filename?
+                fileSize = part.getSize();
+                part.write(fileName);
+                File file = File.builder()
+                        .id(null)
+                        .filePath("src/main/resources/uploads")
+                        .fileName(fileName)
+                        .fileSize(fileSize)
+                        .build();
+                File file1 = fileService.save(file, userId);
+                String json = convert.convertFileToJSON(file1);
+                response.setContentType("application/json");
+                PrintWriter pw = response.getWriter();
+                pw.write(json);
+            }
         }
         catch(IOException e) {
             response.setStatus(500);

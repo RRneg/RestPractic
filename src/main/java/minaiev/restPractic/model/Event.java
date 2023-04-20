@@ -7,10 +7,13 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
+@Getter
+@Setter
 @Builder
 @Table(name = "events")
 public class Event {
@@ -33,11 +36,11 @@ public class Event {
     private Date updated;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Integer userId;
 
     @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private File file;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Integer fileId;
 
 }
