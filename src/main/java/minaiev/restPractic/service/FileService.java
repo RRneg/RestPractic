@@ -6,14 +6,15 @@ import minaiev.restPractic.model.File;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateFileRepositoryImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@MultipartConfig(location = "C:\\Users\\User\\Desktop\\RestPractic1\\RestPractic (1)\\RestPractic\\src\\main\\resources\\uploads")
 public class FileService {
 
     private final HibernateFileRepositoryImpl fileRepository = new HibernateFileRepositoryImpl();
@@ -44,9 +45,9 @@ public class FileService {
 
 
     public List<File> save(HttpServletRequest request) throws IOException, ServletException {
-        Integer userId = request.getIntHeader("userid");
+        int userId = request.getIntHeader("userid");
         String fileName;
-        Long fileSize;
+        long fileSize;
         List<File> files = new ArrayList<>();
 
         for (Part part : request.getParts()) {

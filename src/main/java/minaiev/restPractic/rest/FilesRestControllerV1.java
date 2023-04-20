@@ -21,7 +21,7 @@ import javax.servlet.http.Part;
 
 
 @WebServlet(value = "/api/v1/files/*")
-@MultipartConfig(location = "src/main/resources/uploads")
+
 public class FilesRestControllerV1 extends HttpServlet {
 
     private final FileService fileService = new FileService();
@@ -61,7 +61,7 @@ public class FilesRestControllerV1 extends HttpServlet {
         }
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
         List<File> files = fileService.save(request);
         String json = convert.convertListFilesToJSON(files);

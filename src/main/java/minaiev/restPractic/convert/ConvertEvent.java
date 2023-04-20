@@ -20,9 +20,9 @@ public class ConvertEvent {
                 .eventStatus(event.getEventStatus().toString())
                 .updated(event.getUpdated().toString())
                 .created(event.getCreated().toString())
-                .userName(event.getUser().getUserName())
-                .fileName(event.getFile().getFileName())
-                .filePath(event.getFile().getFilePath()).build();
+                .userName(event.getUserId().getUserName())
+                .fileName(event.getFileId().getFileName())
+                .build();
         return eventDTO;
     }
 

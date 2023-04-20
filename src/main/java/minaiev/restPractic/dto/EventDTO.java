@@ -16,7 +16,7 @@ public class EventDTO {
     private String created;
     private String userName;
     private String fileName;
-    private String filePath;
+
 
 
 }
