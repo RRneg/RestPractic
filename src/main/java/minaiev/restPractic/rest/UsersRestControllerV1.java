@@ -57,7 +57,7 @@ public class UsersRestControllerV1 extends HttpServlet {
             }
         }
 
-    }
+   }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = getJson.getUserJSON(request);

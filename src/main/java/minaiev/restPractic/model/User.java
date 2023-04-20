@@ -8,13 +8,15 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.List;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @Entity
-@Builder
 @Table(name = "users")
 public class User {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,31 +28,19 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    public User() {
-    }
 
-    public User(Integer id, String userName) {
+
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @ToString.Exclude
+    private List<Event> events;
+
+
+    public User(Integer id, String userName, List<Event> events) {
         this.id = id;
         this.userName = userName;
+        this.events = events;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-  //  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-   // private List<Event> events;
 
 }
