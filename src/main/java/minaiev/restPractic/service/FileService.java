@@ -3,15 +3,14 @@ package minaiev.restPractic.service;
 import minaiev.restPractic.model.Event;
 import minaiev.restPractic.model.EventStatus;
 import minaiev.restPractic.model.File;
-import minaiev.restPractic.model.User;
 import minaiev.restPractic.repository.hibernateRepository.hibernate.HibernateFileRepositoryImpl;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.net.URL;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.*;
 import java.net.http.HttpRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class FileService {
     private final HibernateFileRepositoryImpl fileRepository = new HibernateFileRepositoryImpl();
     private final UserService userService = new UserService();
     private final EventService eventService = new EventService();
-    private final String fileDisk = "/";
+
 
 
     public File getById(Integer fileId) {
@@ -44,21 +43,39 @@ public class FileService {
 
 
 
-    public File save(File file, Integer userId) throws IOException {
+    public List<File> save(HttpServletRequest request) throws IOException, ServletException {
+        Integer userId = request.getIntHeader("userid");
+        String fileName;
+        Long fileSize;
+        List<File> files = new ArrayList<>();
 
-        File file1 = fileRepository.save(file);
+        for (Part part : request.getParts()) {
+                fileName = part.getName();
+                fileSize = part.getSize();
+                part.write(fileName);
 
-        Event event = Event.builder()
-                .id(null)
-                .eventStatus(EventStatus.ACTIVE)
-                .updated(new Date())
-                .created(new Date())
-                .userId(userId)
-                .fileId(file1.getId()).build();
+                File file = File.builder()
+                        .id(null)
+                        .filePath("src/main/resources/uploads")
+                        .fileName(fileName)
+                        .fileSize(fileSize)
+                        .build();
+                File createdFile = fileRepository.save(file);
+                files.add(createdFile);
 
-        eventService.save(event);
 
-        return file1;
+                Event event = Event.builder()
+                    .id(null)
+                    .eventStatus(EventStatus.ACTIVE)
+                    .updated(new Date())
+                    .created(new Date())
+                    .userId(userService.getById(userId))
+                    .fileId(file).build();
+
+            eventService.save(event);
+
+            }
+        return files;
     }
 
 }

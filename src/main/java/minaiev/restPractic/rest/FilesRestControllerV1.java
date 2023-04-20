@@ -18,6 +18,8 @@ import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Part;
 
+
+
 @WebServlet(value = "/api/v1/files/*")
 @MultipartConfig(location = "src/main/resources/uploads")
 public class FilesRestControllerV1 extends HttpServlet {
@@ -25,7 +27,7 @@ public class FilesRestControllerV1 extends HttpServlet {
     private final FileService fileService = new FileService();
     private final URISubstring uriSubstring = new URISubstring();
     private final ConvertFile convert = new ConvertFile();
-    private final GetJson getJson = new GetJson();
+
 
 
     public void init() throws ServletException {
@@ -60,27 +62,14 @@ public class FilesRestControllerV1 extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer userId = request.getIntHeader("userid");
-        String fileName;
-        Long fileSize;
         try {
-            for (Part part : request.getParts()) {
-                fileName = part.getName();   //Could I get filename?
-                fileSize = part.getSize();
-                part.write(fileName);
-                File file = File.builder()
-                        .id(null)
-                        .filePath("src/main/resources/uploads")
-                        .fileName(fileName)
-                        .fileSize(fileSize)
-                        .build();
-                File file1 = fileService.save(file, userId);
-                String json = convert.convertFileToJSON(file1);
+        List<File> files = fileService.save(request);
+        String json = convert.convertListFilesToJSON(files);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
             }
-        }
+
         catch(IOException e) {
             response.setStatus(500);
         }
