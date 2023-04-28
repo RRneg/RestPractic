@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -49,8 +50,9 @@ public class FileService {
         String fileName;
         long fileSize;
         List<File> files = new ArrayList<>();
+        Collection<Part> parts = request.getParts();
 
-        for (Part part : request.getParts()) {
+        for (Part part : parts) {
                 fileName = part.getName();
                 fileSize = part.getSize();
                 part.write(fileName);
