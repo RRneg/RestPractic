@@ -72,8 +72,8 @@ public class FileService {
                 .eventStatus(EventStatus.ACTIVE)
                 .updated(new Date())
                 .created(new Date())
-                .userId(userService.getById(userId))
-                .fileId(file).build();
+                .user(userService.getById(userId))
+                .file(file).build();
 
         eventService.save(event);
 

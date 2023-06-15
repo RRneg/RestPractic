@@ -37,10 +37,10 @@ public class Event {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User userId;
+    private User user;
 
     @JoinColumn(name = "file_id")
     @OneToOne(fetch = FetchType.LAZY)
-    private File fileId;
+    private File file;
 
 }
