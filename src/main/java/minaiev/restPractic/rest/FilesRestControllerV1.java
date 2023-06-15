@@ -3,12 +3,9 @@ package minaiev.restPractic.rest;
 import minaiev.restPractic.convert.ConvertFile;
 import minaiev.restPractic.model.File;
 import minaiev.restPractic.service.FileService;
-import minaiev.restPractic.util.GetJson;
 import minaiev.restPractic.util.URISubstring;
 import org.hibernate.SessionException;
-
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Part;
 
 
 
 @WebServlet(value = "/api/v1/files/*")
-
 public class FilesRestControllerV1 extends HttpServlet {
 
     private final FileService fileService = new FileService();
@@ -63,8 +58,8 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-        List<File> files = fileService.save(request);
-        String json = convert.convertListFilesToJSON(files);
+        File file = fileService.save(request);
+        String json = convert.convertFileToJSON(file);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
