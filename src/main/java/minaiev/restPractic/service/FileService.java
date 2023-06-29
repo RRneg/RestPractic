@@ -44,20 +44,21 @@ public class FileService {
 
 
     public File save(HttpServletRequest request) throws IOException, ServletException {
-        String path = "src/main/resources/uploads" +  "/" + getFileName(request);
+        String fileName = getFileName(request);
+        String path = "src/main/resources/uploads" +  "/" + fileName;
         int userId = request.getIntHeader("userid");
         java.io.File fileIO = new java.io.File(path);
 
         FileOutputStream fos = new FileOutputStream(fileIO);
         byte[] buffer = new byte[8096];
-        InputStream is = request.getInputStream();
-        int len = is.read(buffer);
+        InputStream fis =request.getInputStream();
+        int len = fis.read(buffer);
         while (len != -1) {
             fos.write(buffer, 0, len);
-            len = is.read(buffer);
+            len = fis.read(buffer);
         }
         fos.close();
-        is.close();
+        fis.close();
 
         File file = File.builder()
                 .id(null)
