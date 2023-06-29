@@ -50,17 +50,18 @@ public class FileService {
 
         FileOutputStream fos = new FileOutputStream(fileIO);
         byte[] buffer = new byte[8096];
-        int len = request.getInputStream().read(buffer);
+        InputStream is = request.getInputStream();
+        int len = is.read(buffer);
         while (len != -1) {
             fos.write(buffer, 0, len);
-            len = request.getInputStream().read(buffer);
+            len = is.read(buffer);
         }
         fos.close();
-        request.getInputStream().close();
+        is.close();
 
         File file = File.builder()
                 .id(null)
-                .filePath("src/main/resources/uploads")
+                .filePath(path)
                 .fileName(fileIO.getName())
                 .fileSize(fileIO.length())
                 .build();
@@ -86,21 +87,21 @@ public class FileService {
         BufferedReader br = request.getReader();
         String line;
         String line1 = null;
-        ArrayList<String> bodyLines = new ArrayList<>();
+
 
 
         while ((line = br.readLine()) != null) {
-            bodyLines.add(line);
+            if (line.contains("Content-Disposition")){
+            line1 = line;
+            break;
+            }
         }
 
-        for (String lineIter: bodyLines) {
-            if (lineIter.contains("Content-Disposition"))
-               line1 = lineIter;
-        }
+
 
         if (line1 != null) {
-            String[] withFileName = line1.substring(0, line1.length() - 1).split("\'");
-            return withFileName[withFileName.length-1];
+            String[] withFileName = line1.split("\"");
+            return withFileName[3];
         }
         else
             return line1;
