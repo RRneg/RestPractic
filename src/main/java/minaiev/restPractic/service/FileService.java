@@ -97,6 +97,8 @@ public class FileService {
             }
         }
 
+        br.close();
+
 
 
         if (line1 != null) {
