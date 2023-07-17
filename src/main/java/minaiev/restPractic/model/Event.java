@@ -35,12 +35,12 @@ public class Event {
     @UpdateTimestamp
     private Date updated;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User user;
 
-    @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private File file;
 
 }

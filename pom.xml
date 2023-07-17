@@ -18,6 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>11.0.8</maven.compiler.source>
     <maven.compiler.target>11.0.8</maven.compiler.target>
+    <apache.commons.fileupload.version>1.2.2</apache.commons.fileupload.version>
 
   </properties>
 
@@ -75,7 +76,15 @@
       <version>1.18.22</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>${apache.commons.fileupload.version}</version>
+    </dependency>
   </dependencies>
+
+
 
   <build>
     <finalName>RestPractic</finalName>

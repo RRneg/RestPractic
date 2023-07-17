@@ -58,7 +58,7 @@ public class FilesRestControllerV1 extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-        File file = fileService.save(request);
+        File file = fileService.saveFiles(request);
         String json = convert.convertFileToJSON(file);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
