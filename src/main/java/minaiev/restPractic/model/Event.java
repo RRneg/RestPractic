@@ -23,7 +23,7 @@ public class Event {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "status")
+    @Column(name = "event_status")
     @Enumerated(value = EnumType.STRING)
     private EventStatus eventStatus;
 
