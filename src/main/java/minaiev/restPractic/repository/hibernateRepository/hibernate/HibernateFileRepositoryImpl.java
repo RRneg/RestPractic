@@ -54,9 +54,9 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public List<File> getAll() {
         try (Session session = SQLUtil.getSession()) {
-            String st = String.format("FROM File as file" +
-                    "inner join Event as event " +
-                    "inner join User as user " +
+            String st = String.format("SELECT File FROM File as file" +
+                    "inner join fetch Event as event on file.id = event.file_id" +
+                    "inner join fetch User as user on event.user_id = user.id" +
                     "where user.id = %d", HibernateFileRepositoryImpl.getUser_Id());
             List<File> files = session.createQuery(st).list();
             session.close();
