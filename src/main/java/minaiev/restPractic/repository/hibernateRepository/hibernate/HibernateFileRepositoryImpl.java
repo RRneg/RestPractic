@@ -12,15 +12,6 @@ import java.util.List;
 
 public class HibernateFileRepositoryImpl implements FileRepository {
 
-    public static Integer user_Id;
-
-    public static Integer getUser_Id() {
-        return user_Id;
-    }
-
-    public static void setUser_Id(Integer user_Id) {
-        HibernateFileRepositoryImpl.user_Id = user_Id;
-    }
 
     @Override
     public File getById(Integer id) {
@@ -54,11 +45,7 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public List<File> getAll() {
         try (Session session = SQLUtil.getSession()) {
-            String st = String.format("SELECT File FROM File as file" +
-                    "inner join fetch Event as event on file.id = event.file_id" +
-                    "inner join fetch User as user on event.user_id = user.id" +
-                    "where user.id = %d", HibernateFileRepositoryImpl.getUser_Id());
-            List<File> files = session.createQuery(st).list();
+            List<File> files = session.createQuery("FROM File").list();
             session.close();
             return files;
         }

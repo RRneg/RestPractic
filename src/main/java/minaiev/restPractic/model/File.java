@@ -36,9 +36,7 @@ public class File {
     @JsonProperty("file_size")
     private Long fileSize;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "file")
-    @ToString.Exclude
-    private Event event;
+
 
 
 }

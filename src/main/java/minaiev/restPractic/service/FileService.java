@@ -28,7 +28,6 @@ public class FileService {
 
 
     public File getById(Integer fileId) {
-
         return fileRepository.getById(fileId);
     }
 
@@ -41,8 +40,7 @@ public class FileService {
     }
 
 
-    public List<File> getAllFiles(Integer userId) {
-        HibernateFileRepositoryImpl.setUser_Id(userId);
+    public List<File> getAllFiles() {
         return fileRepository.getAll();
     }
 

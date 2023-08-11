@@ -12,23 +12,11 @@ import java.util.List;
 
 public class HibernateEventRepositoryImpl implements EventRepository {
 
-    public List<Event> getEventByUserId(Integer userId) {
-        try (Session session = SQLUtil.getSession()){
-        Query query = session.createQuery("FROM Event E WHERE E.user_id = :userId")
-                .setParameter("userId", userId);
-        List<Event> events = query.list();
-        session.close();
-        return events;
-        }
-        catch (SessionException e){
-        return null;
-        }
-    }
 
     public void setDelStatus(Integer fileId) throws SessionException{
             Session session = SQLUtil.getSession();
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("UPDATE Event E SET event_status 'DELETED' WHERE E.file_id = :fileId");
+            Query query = session.createQuery("UPDATE Event E SET event_status = 'DELETED' WHERE E.id = :fileId");
             query.setParameter("fileId", fileId);
             query.executeUpdate();
             transaction.commit();
@@ -50,14 +38,15 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
 
     @Override
-    public Event getById(Integer fileId) {
-        try (Session session = SQLUtil.getSession()) {
-            return (Event) session.createQuery("FROM Event E WHERE E.file_id = :fileId").
-                    setParameter("fileId", fileId).getSingleResult();
+    public Event getById (Integer id){
+        try (Session session = SQLUtil.getSession()){
+            Event event = session.get(Event.class, id);
+            return event;
         }
-        catch (SessionException e) {
+        catch (SessionException e){
             return null;
         }
+
     }
 
     @Override
@@ -72,7 +61,13 @@ public class HibernateEventRepositoryImpl implements EventRepository {
 
     @Override
     public List<Event> getAll() {
-        return null;
+        try(Session session = SQLUtil.getSession()) {
+            List<Event> events = session.createQuery("FROM Event").list();
+            return events;
+        }
+        catch (SessionException e) {
+            return null;
+        }
     }
 
 }

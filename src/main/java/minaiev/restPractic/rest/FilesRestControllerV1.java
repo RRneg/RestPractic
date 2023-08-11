@@ -29,24 +29,24 @@ public class FilesRestControllerV1 extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer header = request.getIntHeader("userId");
-        if (header == null) {
-            String ending = uriSubstring.uriSubstring(request);
-            File file = fileService.getById(Integer.valueOf(ending));
-            if (file != null) {
+        String ending = uriSubstring.uriSubstring(request);
+        if (ending.equals("files")) {
+            List<File> files = fileService.getAllFiles();
+            if (files != null) {
                 ConvertFile convert = new ConvertFile();
-                String json = convert.convertFileToJSON(file);
+                String json = convert.convertListFilesToJSON(files);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
             } else {
                 response.setStatus(500);
             }
+
         } else {
-            List<File> files = fileService.getAllFiles(header);
-            if (files != null) {
+            File file = fileService.getById(Integer.valueOf(ending));
+            if (file != null) {
                 ConvertFile convert = new ConvertFile();
-                String json = convert.convertListFilesToJSON(files);
+                String json = convert.convertFileToJSON(file);
                 response.setContentType("application/json");
                 PrintWriter pw = response.getWriter();
                 pw.write(json);
